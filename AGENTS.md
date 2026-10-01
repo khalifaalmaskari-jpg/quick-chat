@@ -83,3 +83,10 @@ When reviewing UI/code against the design-engineering skill, use:
 | --- | --- | --- |
 | Current behavior/style | Proposed behavior/style | Design or engineering rationale |
 
+
+## Versioning discipline
+
+- Every user-visible, runtime, UI, behavior, PWA, cache, manifest, icon-reference, or application-code change must increment the Quick Chat version.
+- A release must update the visible VERSION constant, versioned asset URLs, manifest references, and service-worker cache name together.
+- Documentation-only changes may be grouped into the next application release, but must never leave runtime files with inconsistent version numbers.
+- Never report a new version as complete until the latest GitHub Pages deployment succeeds.
