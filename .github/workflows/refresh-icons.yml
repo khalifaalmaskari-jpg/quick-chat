@@ -1,0 +1,36 @@
+name: Refresh icons
+on:
+  push:
+    paths:
+      - '.github/workflows/refresh-icons.yml'
+permissions:
+  contents: write
+jobs:
+  icons:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build borderless icon assets
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('icons/icon.svg')
+          s=p.read_text()
+          s=s.replace('<rect width="512" height="512" rx="112" fill="#10231c"/><rect x="58" y="58" width="396" height="396" rx="104" fill="#1da851"/>','<rect width="512" height="512" rx="112" fill="#1da851"/>')
+          p.write_text(s)
+          p=Path('icons/icon-maskable.svg')
+          s=p.read_text()
+          s=s.replace('<rect width="512" height="512" fill="#10231c"/><rect x="102" y="102" width="308" height="308" rx="82" fill="#1da851"/>','<rect width="512" height="512" fill="#1da851"/>')
+          p.write_text(s)
+          PY
+          convert -background none icons/icon.svg -resize 180x180 icons/apple-touch-icon.png
+          convert -background none icons/icon.svg -resize 192x192 icons/icon-192.png
+          convert -background none icons/icon.svg -resize 512x512 icons/icon-512.png
+          convert -background none icons/icon-maskable.svg -resize 512x512 icons/icon-maskable-512.png
+      - name: Commit icons
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add icons
+          git commit -m "Regenerate borderless Quick Chat icons" || exit 0
+          git push
