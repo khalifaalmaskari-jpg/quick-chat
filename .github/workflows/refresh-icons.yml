@@ -23,10 +23,11 @@ jobs:
           s=s.replace('<rect width="512" height="512" fill="#10231c"/><rect x="102" y="102" width="308" height="308" rx="82" fill="#1da851"/>','<rect width="512" height="512" fill="#1da851"/>')
           p.write_text(s)
           PY
-          convert -background none icons/icon.svg -resize 180x180 icons/apple-touch-icon.png
-          convert -background none icons/icon.svg -resize 192x192 icons/icon-192.png
-          convert -background none icons/icon.svg -resize 512x512 icons/icon-512.png
-          convert -background none icons/icon-maskable.svg -resize 512x512 icons/icon-maskable-512.png
+          sudo apt-get update -qq && sudo apt-get install -y -qq librsvg2-bin
+          rsvg-convert -w 180 -h 180 icons/icon.svg -o icons/apple-touch-icon.png
+          rsvg-convert -w 192 -h 192 icons/icon.svg -o icons/icon-192.png
+          rsvg-convert -w 512 -h 512 icons/icon.svg -o icons/icon-512.png
+          rsvg-convert -w 512 -h 512 icons/icon-maskable.svg -o icons/icon-maskable-512.png
       - name: Commit icons
         run: |
           git config user.name "github-actions[bot]"
